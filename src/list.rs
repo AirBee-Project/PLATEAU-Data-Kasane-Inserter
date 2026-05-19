@@ -1,0 +1,4340 @@
+/// PLATEAUのデータセット情報
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Dataset {
+    /// 整備年度（西暦）
+    pub year: u16,
+    /// G空間情報センターのデータセットURL
+    pub url: &'static str,
+    /// タイトル
+    pub title: &'static str,
+    /// 特記事項（例：「南大沢のみ」等）
+    pub note: Option<&'static str>,
+}
+
+/// 都市・地方公共団体ごとのデータ
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct City {
+    /// 都市名
+    pub name: &'static str,
+    /// 年度別のデータセット一覧
+    pub datasets: &'static [Dataset],
+}
+
+/// 都道府県ごとのデータ
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Prefecture {
+    /// 都道府県名
+    pub name: &'static str,
+    /// 都道府県内の都市一覧
+    pub cities: &'static [City],
+}
+
+/// 地方・エリアごとのデータ
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Region {
+    /// 地方名（例：「北海道」、「東北」、「関東」等）
+    pub name: &'static str,
+    /// 地方内の都道府県一覧
+    pub prefectures: &'static [Prefecture],
+}
+
+/// 日本全国のPLATEAU 3D都市モデルデータリスト（静的定義）
+pub const REGIONS: &[Region] = &[
+    Region {
+        name: "北海道",
+        prefectures: &[Prefecture {
+            name: "北海道",
+            cities: &[
+                City {
+                    name: "札幌市",
+                    datasets: &[Dataset {
+                        year: 2020,
+                        url: "https://www.geospatial.jp/ckan/dataset/plateau-01100-sapporo-shi-2020",
+                        title: "札幌市2020",
+                        note: None,
+                    }],
+                },
+                City {
+                    name: "更別村",
+                    datasets: &[
+                        Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-01639-sarabetsu-mura-2022",
+                            title: "更別村2022",
+                            note: None,
+                        },
+                        Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-01639-sarabetsu-mura-2023",
+                            title: "更別村2023",
+                            note: None,
+                        },
+                    ],
+                },
+                City {
+                    name: "室蘭市",
+                    datasets: &[Dataset {
+                        year: 2022,
+                        url: "https://www.geospatial.jp/ckan/dataset/plateau-01205-muroran-shi-2022",
+                        title: "室蘭市2022",
+                        note: None,
+                    }],
+                },
+            ],
+        }],
+    },
+    Region {
+        name: "東北",
+        prefectures: &[
+            Prefecture {
+                name: "青森県",
+                cities: &[
+                    City {
+                        name: "鰺ヶ沢町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-02321-ajigasawa-machi-2025",
+                            title: "鰺ヶ沢町2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "むつ市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-02208-mutsu-shi-2022",
+                            title: "むつ市2022",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "岩手県",
+                cities: &[
+                    City {
+                        name: "宮古市",
+                        datasets: &[
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-03202-miyako-shi-2024",
+                                title: "宮古市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-03202-miyako-shi-2025",
+                                title: "宮古市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "盛岡市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-03201-morioka-shi-2022",
+                                title: "盛岡市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-03201-morioka-shi-2023",
+                                title: "盛岡市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-03201-morioka-shi-2024",
+                                title: "盛岡市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "宮城県",
+                cities: &[City {
+                    name: "仙台市",
+                    datasets: &[
+                        Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-04100-sendai-shi-2022",
+                            title: "仙台市2022",
+                            note: None,
+                        },
+                        Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-04100-sendai-shi-2024",
+                            title: "仙台市2024",
+                            note: None,
+                        },
+                    ],
+                }],
+            },
+            Prefecture {
+                name: "秋田県",
+                cities: &[City {
+                    name: "大館市",
+                    datasets: &[Dataset {
+                        year: 2024,
+                        url: "https://www.geospatial.jp/ckan/dataset/plateau-05204-odate-shi-2024",
+                        title: "大館市2024",
+                        note: None,
+                    }],
+                }],
+            },
+            Prefecture {
+                name: "福島県",
+                cities: &[
+                    City {
+                        name: "いわき市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-07204-iwaki-shi-2020",
+                            title: "いわき市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "郡山市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-07203-koriyama-shi-2020",
+                            title: "郡山市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "白河市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-07205-shirakawa-shi-2020",
+                            title: "白河市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "相馬市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-07209-soma-shi-2023",
+                            title: "相馬市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "福島市",
+                        datasets: &[
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-07201-fukushima-shi-2024",
+                                title: "福島市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-07201-fukushima-shi-2025",
+                                title: "福島市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "南相馬市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-07212-minamisouma-shi-2022",
+                            title: "南相馬市2022",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+        ],
+    },
+    Region {
+        name: "関東",
+        prefectures: &[
+            Prefecture {
+                name: "茨城県",
+                cities: &[
+                    City {
+                        name: "境町",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-08546-sakai-machi-2023",
+                            title: "境町2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "つくば市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-08220-tsukuba-shi-2022",
+                                title: "つくば市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-08220-tsukuba-shi-2023",
+                                title: "つくば市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "鉾田市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-08234-hokota-shi-2020",
+                                title: "鉾田市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-08234-hokota-shi-2022",
+                                title: "鉾田市2022",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "栃木県",
+                cities: &[City {
+                    name: "宇都宮市",
+                    datasets: &[
+                        Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-09201-utsunomiya-shi-2020",
+                            title: "宇都宮市2020",
+                            note: None,
+                        },
+                        Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-09201-utsunomiya-shi-2023",
+                            title: "宇都宮市2023",
+                            note: None,
+                        },
+                    ],
+                }],
+            },
+            Prefecture {
+                name: "群馬県",
+                cities: &[
+                    City {
+                        name: "桐生市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-10203-kiryu-shi-2020",
+                            title: "桐生市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "館林市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-10207-tatebayashi-shi-2020",
+                            title: "館林市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "前橋市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-10201-maebashi-shi-2023",
+                            title: "前橋市2023",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "埼玉県",
+                cities: &[
+                    City {
+                        name: "上尾市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11219-ageo-shi-2025",
+                            title: "上尾市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "朝霞市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11227-asaka-shi-2025",
+                            title: "朝霞市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "伊奈町",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11301-ina-machi-2024",
+                            title: "伊奈町2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "入間市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11225-iruma-shi-2025",
+                            title: "入間市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "小川町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11343-ogawa-machi-2025",
+                            title: "小川町2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "桶川市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11231-okegawa-shi-2025",
+                            title: "桶川市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "春日部市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11214-kasukabe-shi-2023",
+                            title: "春日部市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "川島町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11346-kawajima-machi-2025",
+                            title: "川島町2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "北本市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11233-kitamoto-shi-2025",
+                            title: "北本市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "加須市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11210-kazo-shi-2023",
+                            title: "加須市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "上里町",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11385-kamisato-machi-2024",
+                            title: "上里町2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "川口市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11203-kawaguchi-shi-2024",
+                            title: "川口市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "久喜市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11232-kuki-shi-2023",
+                            title: "久喜市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "熊谷市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11202-kumagaya-shi-2020",
+                                title: "熊谷市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11202-kumagaya-shi-2023",
+                                title: "熊谷市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11202-kumagaya-shi-2024",
+                                title: "熊谷市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11202-kumagaya-shi-2025",
+                                title: "熊谷市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "鴻巣市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11217-konosu-shi-2024",
+                            title: "鴻巣市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "越谷市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11222-koshigaya-shi-2023",
+                            title: "越谷市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "さいたま市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11100-saitama-shi-2020",
+                                title: "さいたま市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11100-saitama-shi-2022",
+                                title: "さいたま市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11100-saitama-shi-2023",
+                                title: "さいたま市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11100-saitama-shi-2024",
+                                title: "さいたま市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11100-saitama-shi-2025",
+                                title: "さいたま市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "坂戸市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11239-sakado-shi-2025",
+                            title: "坂戸市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "幸手市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11240-satte-shi-2024",
+                            title: "幸手市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "狭山市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11215-sayama-shi-2025",
+                            title: "狭山市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "志木市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11228-shiki-shi-2024",
+                            title: "志木市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "白岡市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11246-shiraoka-shi-2023",
+                            title: "白岡市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "杉戸町",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11464-sugito-machi-2023",
+                            title: "杉戸町2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "草加市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11221-soka-shi-2025",
+                            title: "草加市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "秩父市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11207-chichibu-shi-2025",
+                            title: "秩父市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "鶴ヶ島市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11241-tsurugashima-shi-2024",
+                            title: "鶴ヶ島市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "所沢市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11208-tokorozawa-shi-2024",
+                            title: "所沢市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "戸田市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11224-toda-shi-2022",
+                            title: "戸田市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "滑川町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11341-namegawa-machi-2025",
+                            title: "滑川町2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "新座市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11230-niiza-shi-2020",
+                                title: "新座市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-11230-niiza-shi-2024",
+                                title: "新座市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "蓮田市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11238-hasuda-shi-2022",
+                            title: "蓮田市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "鳩山町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11348-hatoyama-machi-2025",
+                            title: "鳩山町2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "羽生市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11216-hanyu-shi-2025",
+                            title: "羽生市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "深谷市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11218-fukaya-shi-2025",
+                            title: "深谷市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "富士見市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11235-fujimi-shi-2024",
+                            title: "富士見市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "ふじみ野市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11245-fujimino-shi-2025",
+                            title: "ふじみ野市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "本庄市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11211-honjo-shi-2025",
+                            title: "本庄市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "松伏町",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11465-matsubushi-machi-2023",
+                            title: "松伏町2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "三郷市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11237-misato-shi-2024",
+                            title: "三郷市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "三芳町",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11324-miyoshi-machi-2024",
+                            title: "三芳町2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "宮代町",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11442-miyashiro-machi-2023",
+                            title: "宮代町2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "毛呂山町",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11326-moroyama-machi-2020",
+                            title: "毛呂山町2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "八潮市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11234-yashio-shi-2023",
+                            title: "八潮市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "吉川市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11243-yoshikawa-shi-2023",
+                            title: "吉川市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "吉見町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11347-yoshimi-machi-2025",
+                            title: "吉見町2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "寄居町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11408-yorii-machi-2025",
+                            title: "寄居町2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "嵐山町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11342-ranzan-machi-2025",
+                            title: "嵐山町2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "和光市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11229-wako-shi-2025",
+                            title: "和光市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "蕨市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-11223-warabi-shi-2024",
+                            title: "蕨市2024",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "千葉県",
+                cities: &[
+                    City {
+                        name: "柏市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-12217-kashiwa-shi-2020",
+                            title: "柏市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "木更津市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-12206-kisarazu-shi-2024",
+                            title: "木更津市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "多古町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-12347-tako-machi-2025",
+                            title: "多古町2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "千葉市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-12100-chiba-shi-2024",
+                            title: "千葉市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "茂原市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-12210-mobara-shi-2022",
+                            title: "茂原市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "八千代市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-12221-yachiyo-shi-2022",
+                            title: "八千代市2022",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "東京都",
+                cities: &[
+                    City {
+                        name: "東京都サンプルデータ（竹芝モデル）",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-tokyo-takeshiba-2023",
+                            title: "東京都サンプルデータ（竹芝モデル）2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "東京都23区",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-tokyo23ku",
+                                title: "東京都23区2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-tokyo23ku-2022",
+                                title: "東京都23区2022",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "足立区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13121-adachi-ku-2023",
+                                title: "足立区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13121-adachi-ku-2025",
+                                title: "足立区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "荒川区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13118-arakawa-ku-2023",
+                                title: "荒川区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13118-arakawa-ku-2025",
+                                title: "荒川区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "板橋区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13119-itabashi-ku-2023",
+                                title: "板橋区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13119-itabashi-ku-2025",
+                                title: "板橋区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "江戸川区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13123-edogawa-ku-2023",
+                                title: "江戸川区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13123-edogawa-ku-2025",
+                                title: "江戸川区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "大田区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13111-ota-ku-2023",
+                                title: "大田区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13111-ota-ku-2025",
+                                title: "大田区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "葛飾区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13122-katsushika-ku-2023",
+                                title: "葛飾区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13122-katsushika-ku-2025",
+                                title: "葛飾区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "北区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13117-kita-ku-2023",
+                                title: "北区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13117-kita-ku-2025",
+                                title: "北区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "江東区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13108-koto-ku-2023",
+                                title: "江東区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13108-koto-ku-2025",
+                                title: "江東区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "品川区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13109-shinagawa-ku-2023",
+                                title: "品川区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13109-shinagawa-ku-2024",
+                                title: "品川区2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13109-shinagawa-ku-2025",
+                                title: "品川区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "渋谷区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13113-shibuya-ku-2023",
+                                title: "渋谷区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13113-shibuya-ku-2025",
+                                title: "渋谷区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "新宿区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13104-shinjuku-ku-2023",
+                                title: "新宿区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13104-shinjuku-ku-2025",
+                                title: "新宿区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "杉並区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13115-suginami-ku-2023",
+                                title: "杉並区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13115-suginami-ku-2024",
+                                title: "杉並区2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13115-suginami-ku-2025",
+                                title: "杉並区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "墨田区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13107-sumida-ku-2023",
+                                title: "墨田区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13107-sumida-ku-2024",
+                                title: "墨田区2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13107-sumida-ku-2025",
+                                title: "墨田区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "世田谷区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13112-setagaya-ku-2023",
+                                title: "世田谷区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13112-setagaya-ku-2025",
+                                title: "世田谷区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "台東区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13106-taito-ku-2023",
+                                title: "台東区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13106-taito-ku-2024",
+                                title: "台東区2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13106-taito-ku-2025",
+                                title: "台東区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "中央区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13102-chuo-ku-2023",
+                                title: "中央区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13102-chuo-ku-2025",
+                                title: "中央区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "千代田区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13101-chiyoda-ku-2023",
+                                title: "千代田区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13101-chiyoda-ku-2025",
+                                title: "千代田区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "豊島区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13116-toshima-ku-2023",
+                                title: "豊島区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13116-toshima-ku-2025",
+                                title: "豊島区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "中野区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13114-nakano-ku-2023",
+                                title: "中野区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13114-nakano-ku-2025",
+                                title: "中野区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "練馬区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13120-nerima-ku-2023",
+                                title: "練馬区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13120-nerima-ku-2025",
+                                title: "練馬区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "文京区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13105-bunkyo-ku-2023",
+                                title: "文京区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13105-bunkyo-ku-2025",
+                                title: "文京区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "港区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13103-minato-ku-2023",
+                                title: "港区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13103-minato-ku-2025",
+                                title: "港区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "目黒区",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13110-meguro-ku-2023",
+                                title: "目黒区2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13110-meguro-ku-2025",
+                                title: "目黒区2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "昭島市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13207-akishima-shi-2023",
+                                title: "昭島市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13207-akishima-shi-2025",
+                                title: "昭島市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "あきる野市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13228-akiruno-shi-2023",
+                                title: "あきる野市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13228-akiruno-shi-2025",
+                                title: "あきる野市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "稲城市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13225-inagi-shi-2023",
+                                title: "稲城市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13225-inagi-shi-2025",
+                                title: "稲城市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "青梅市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13205-ome-shi-2023",
+                                title: "青梅市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13205-ome-shi-2025",
+                                title: "青梅市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "奥多摩町",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13308-okutama-machi-2023",
+                                title: "奥多摩町2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13308-okutama-machi-2025",
+                                title: "奥多摩町2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "清瀬市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13221-kiyose-shi-2023",
+                                title: "清瀬市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13221-kiyose-shi-2025",
+                                title: "清瀬市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "国立市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13215-kunitachi-shi-2023",
+                                title: "国立市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13215-kunitachi-shi-2025",
+                                title: "国立市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "小金井市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13210-koganei-shi-2023",
+                                title: "小金井市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13210-koganei-shi-2025",
+                                title: "小金井市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "国分寺市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13214-kokubunji-shi-2023",
+                                title: "国分寺市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13214-kokubunji-shi-2025",
+                                title: "国分寺市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "小平市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13211-kodaira-shi-2023",
+                                title: "小平市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13211-kodaira-shi-2025",
+                                title: "小平市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "狛江市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13219-komae-shi-2023",
+                                title: "狛江市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13219-komae-shi-2025",
+                                title: "狛江市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "立川市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13202-tachikawa-shi-2023",
+                                title: "立川市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13202-tachikawa-shi-2025",
+                                title: "立川市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "多摩市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13224-tama-shi-2023",
+                                title: "多摩市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13224-tama-shi-2025",
+                                title: "多摩市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "調布市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13208-chofu-shi-2023",
+                                title: "調布市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13208-chofu-shi-2025",
+                                title: "調布市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "西東京市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13229-nishitokyo-shi-2022",
+                                title: "西東京市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13229-nishitokyo-shi-2023",
+                                title: "西東京2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13229-nishitokyo-shi-2025",
+                                title: "西東京市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "八王子市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13201-hachioji-shi-2020",
+                                title: "八王子市2020",
+                                note: Some("南大沢のみ"),
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13201-hachioji-shi-2022",
+                                title: "八王子市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13201-hachioji-shi-2023",
+                                title: "八王子市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13201-hachioji-shi-2025",
+                                title: "八王子市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "羽村市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13227-hamura-shi-2023",
+                                title: "羽村市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13227-hamura-shi-2025",
+                                title: "羽村市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "東久留米市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13222-higashikurume-shi-2023",
+                                title: "東久留米市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13222-higashikurume-shi-2025",
+                                title: "東久留米市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "東村山市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13213-higashimurayama-shi-2020",
+                                title: "東村山市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13213-higashimurayama-shi-2023",
+                                title: "東村山市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13213-higashimurayama-shi-2025",
+                                title: "東村山市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "東大和市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13220-higashiyamato-shi-2023",
+                                title: "東大和市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13220-higashiyamato-shi-2025",
+                                title: "東大和市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "日野市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13212-hino-shi-2023",
+                                title: "日野市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13212-hino-shi-2025",
+                                title: "日野市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "日の出町",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13305-hinode-machi-2023",
+                                title: "日の出町2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13305-hinode-machi-2025",
+                                title: "日の出町2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "檜原村",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13307-hinohara-mura-2023",
+                                title: "檜原村2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13307-hinohara-mura-2025",
+                                title: "檜原村2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "府中市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13206-fuchu-shi-2023",
+                                title: "府中市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13206-fuchu-shi-2025",
+                                title: "府中市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "福生市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13218-fussa-shi-2023",
+                                title: "福生市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13218-fussa-shi-2025",
+                                title: "福生市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "町田市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13209-machida-shi-2023",
+                                title: "町田市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13209-machida-shi-2025",
+                                title: "町田市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "瑞穂町",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13303-mizuho-machi-2023",
+                                title: "瑞穂町2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13303-mizuho-machi-2025",
+                                title: "瑞穂町2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "三鷹市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13204-mitaka-shi-2023",
+                                title: "三鷹市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13204-mitaka-shi-2025",
+                                title: "三鷹市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "武蔵野市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13203-musashino-shi-2023",
+                                title: "武蔵野市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13203-musashino-shi-2025",
+                                title: "武蔵野市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "武蔵村山市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13223-musashimurayama-shi-2023",
+                                title: "武蔵村山市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-13223-musashimurayama-shi-2025",
+                                title: "武蔵村山市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "青ケ島村",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-13402-aogashima-mura-2024",
+                            title: "青ケ島村2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "大島町",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-13361-oshima-machi-2024",
+                            title: "大島町2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "小笠原村",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-13421-ogasawara-mura-2025",
+                            title: "小笠原村2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "神津島村",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-13364-kozushima-mura-2024",
+                            title: "神津島村2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "利島村",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-13362-toshima-mura-2024",
+                            title: "利島村2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "新島村",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-13363-niijima-mura-2024",
+                            title: "新島村2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "八丈町",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-13401-hachijo-machi-2024",
+                            title: "八丈町2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "御蔵島村",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-13382-mikurajima-mura-2024",
+                            title: "御蔵島村2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "三宅村",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-13381-miyake-mura-2024",
+                            title: "三宅村2024",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "神奈川県",
+                cities: &[
+                    City {
+                        name: "厚木市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-14212-atsugi-shi-2023",
+                            title: "厚木市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "鎌倉市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-14204-kamakura-shi-2024",
+                            title: "鎌倉市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "川崎市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-14130-kawasaki-shi-2020",
+                                title: "川崎市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-14130-kawasaki-shi-2022",
+                                title: "川崎市2022",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "相模原市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-14150-sagamihara-shi-2020",
+                                title: "相模原市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-14150-sagamihara-shi-2023",
+                                title: "相模原市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-14150-sagamihara-shi-2024",
+                                title: "相模原市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "箱根町",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-14382-hakone-machi-2020",
+                            title: "箱根町2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "藤沢市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+                            title: "藤沢市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "横須賀市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-14201-yokosuka-shi-2020",
+                            title: "横須賀市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "横浜市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-14100-yokohama-city-2020",
+                                title: "横浜市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-14100-yokohama-shi-2022",
+                                title: "横浜市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-14100-yokohama-shi-2023",
+                                title: "横浜市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-14100-yokohama-shi-2024",
+                                title: "横浜市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+    Region {
+        name: "中部",
+        prefectures: &[
+            Prefecture {
+                name: "新潟県",
+                cities: &[
+                    City {
+                        name: "加茂市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-15209-kamo-shi-2023",
+                            title: "加茂市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "三条市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-15204-sanjo-shi-2025",
+                            title: "三条市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "新発田",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-15206-shibata-shi-2025",
+                            title: "新発田市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "上越市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-15222-joetsu-shi-2023",
+                            title: "上越市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "長岡市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-15202-nagaoka-shi-2023",
+                                title: "長岡市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-15202-nagaoka-shi-2024",
+                                title: "長岡市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "新潟市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-15100-niigata-shi-2020",
+                                title: "新潟市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-15100-niigata-shi-2022",
+                                title: "新潟市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-15100-niigata-shi-2023",
+                                title: "新潟市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "富山県",
+                cities: &[
+                    City {
+                        name: "射水市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-16211-imizu-shi-2024",
+                            title: "射水市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "高岡市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-16202-takaoka-shi-2024",
+                            title: "高岡市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "舟橋村",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-16321-funahashi-mura-2025",
+                            title: "舟橋村2025",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "石川県",
+                cities: &[
+                    City {
+                        name: "加賀市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-17206-kaga-shi-2020",
+                                title: "加賀市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2021,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-17206-kaga-shi-2021",
+                                title: "加賀市2021",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-17206-kaga-shi-2022",
+                                title: "加賀市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-17206-kaga-shi-2024",
+                                title: "加賀市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "金沢市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-17201-kanazawa-shi-2020",
+                                title: "金沢市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-17201-kanazawa-shi-2023",
+                                title: "金沢市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-17201-kanazawa-shi-2024",
+                                title: "金沢市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "山梨県",
+                cities: &[City {
+                    name: "甲府市",
+                    datasets: &[
+                        Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-19201-kofu-shi-2022",
+                            title: "甲府市2022",
+                            note: None,
+                        },
+                        Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-19201-kofu-shi-2023",
+                            title: "甲府市2023",
+                            note: None,
+                        },
+                    ],
+                }],
+            },
+            Prefecture {
+                name: "長野県",
+                cities: &[
+                    City {
+                        name: "安曇野市",
+                        datasets: &[
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-20220-azumino-shi-2024",
+                                title: "安曇野市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-20220-azumino-shi-2025",
+                                title: "安曇野市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "飯山市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-20213-iiyama-shi-2025",
+                            title: "飯山市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "伊那市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-20209-ina-shi-2020",
+                            title: "伊那市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "岡谷市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-20204-okaya-shi-2020",
+                                title: "岡谷市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-20204-okaya-shi-2022",
+                                title: "岡谷市2022",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "佐久市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-20217-saku-shi-2022",
+                                title: "佐久市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-20217-saku-shi-2025",
+                                title: "佐久市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "諏訪市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-20206-suwa-shi-2023",
+                            title: "諏訪市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "茅野市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-20214-chino-shi-2020",
+                                title: "茅野市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-20214-chino-shi-2022",
+                                title: "茅野市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-20214-chino-shi-2023",
+                                title: "茅野市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "長野市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-20201-nagano-shi-2024",
+                            title: "長野市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "松本市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-20202-matsumoto-shi-2020",
+                            title: "松本市2020",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "岐阜県",
+                cities: &[
+                    City {
+                        name: "大垣市",
+                        datasets: &[
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-21202-ogaki-shi-2024",
+                                title: "大垣市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-21202-ogaki-shi-2025",
+                                title: "大垣市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "岐阜市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-21201-gifu-shi-2020",
+                                title: "岐阜市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-21201-gifu-shi-2022",
+                                title: "岐阜市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-21201-gifu-shi-2023",
+                                title: "岐阜市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-21201-gifu-shi-2024",
+                                title: "岐阜市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-21201-gifu-shi-2025",
+                                title: "岐阜市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "美濃加茂市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-21211-minokamo-shi-2022",
+                                title: "美濃加茂市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-21211-minokamo-shi-2024",
+                                title: "美濃加茂市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "静岡県",
+                cities: &[
+                    City {
+                        name: "熱海市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22205-atami-shi-2022",
+                                title: "熱海市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22205-atami-shi-2023",
+                                title: "熱海市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "伊豆市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22222-izu-shi-2022",
+                                title: "伊豆市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22222-izu-shi-2023",
+                                title: "伊豆市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "伊豆の国市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22225-izunokuni-shi-2022",
+                                title: "伊豆の国市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22225-izunokuni-shi-2023",
+                                title: "伊豆の国市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "伊東市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22208-ito-shi-2022",
+                                title: "伊東市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22208-ito-shi-2023",
+                                title: "伊東市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "磐田市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22211-iwata-shi-2022",
+                                title: "磐田市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22211-iwata-shi-2023",
+                                title: "磐田市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "御前崎市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22223-omaezaki-shi-2022",
+                                title: "御前崎市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22223-omaezaki-shi-2023",
+                                title: "御前崎市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "小山町",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22344-oyama-cho-2022",
+                                title: "小山町2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22344-oyama-cho-2023",
+                                title: "小山町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "掛川市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22213-kakegawa-shi-2020",
+                                title: "掛川市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22213-kakegawa-shi-2023",
+                                title: "掛川市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "河津町",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22302-kawazu-cho-2022",
+                                title: "河津町2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22302-kawazu-cho-2023",
+                                title: "河津町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "川根本町",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-22429-kawanehon-cho-2023",
+                            title: "川根本町2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "函南町",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22325-kannami-cho-2022",
+                                title: "函南町2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22325-kannami-cho-2023",
+                                title: "函南町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "菊川市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22224-kikugawa-city-2020",
+                                title: "菊川市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22224-kikugawa-shi-2023",
+                                title: "菊川市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "湖西市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22221-kosai-shi-2022",
+                                title: "湖西市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22221-kosai-shi-2023",
+                                title: "湖西市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "御殿場市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22215-gotenba-shi-2022",
+                                title: "御殿場市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22215-gotenba-shi-2023",
+                                title: "御殿場市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "静岡市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22100-shizuoka-shi-2022",
+                                title: "静岡市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22100-shizuoka-shi-2023",
+                                title: "静岡市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "島田市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-22209-shimada-shi-2023",
+                            title: "島田市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "清水町",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22341-shimizu-cho-2022",
+                                title: "清水町2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22341-shimizu-cho-2023",
+                                title: "清水町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "下田市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22219-shimoda-shi-2022",
+                                title: "下田市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22219-shimoda-shi-2023",
+                                title: "下田市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "裾野市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22220-susono-shi-2022",
+                                title: "裾野市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22220-susono-shi-2023",
+                                title: "裾野市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "長泉町",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22342-nagaizumi-cho-2022",
+                                title: "長泉町2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22342-nagaizumi-cho-2023",
+                                title: "長泉町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "西伊豆町",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-22306-nishiizu-cho-2023",
+                            title: "西伊豆町2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "沼津市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22203-numazu-shi-2020",
+                                title: "沼津市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2021,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22203-numazu-shi-2021",
+                                title: "沼津市2021",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22203-numazu-shi-2023",
+                                title: "沼津市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "浜松市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22130-hamamatsu-shi-2022",
+                                title: "浜松市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22130-hamamatsu-shi-2023",
+                                title: "浜松市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "東伊豆町",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22301-higashiizu-cho-2022",
+                                title: "東伊豆町2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22301-higashiizu-cho-2023",
+                                title: "東伊豆町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "袋井市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22216-fukuroi-shi-2022",
+                                title: "袋井市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22216-fukuroi-shi-2023",
+                                title: "袋井市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "富士市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22210-fuji-shi-2022",
+                                title: "富士市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22210-fuji-shi-2023",
+                                title: "富士市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "藤枝市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22214-fujieda-shi-2022",
+                                title: "藤枝市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22214-fujieda-shi-2023",
+                                title: "藤枝市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "富士宮市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22207-fujinomiya-shi-2022",
+                                title: "富士宮市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22207-fujinomiya-shi-2023",
+                                title: "富士宮市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "牧之原市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22226-makinohara-shi-2022",
+                                title: "牧之原市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22226-makinohara-shi-2023",
+                                title: "牧之原市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "松崎町",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-22305-matsuzaki-cho-2023",
+                            title: "松崎町2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "三島市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22206-mishima-shi-2022",
+                                title: "三島市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22206-mishima-shi-2023",
+                                title: "三島市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "南伊豆町",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22304-minamiizu-cho-2022",
+                                title: "南伊豆町2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22304-minamiizu-cho-2023",
+                                title: "南伊豆町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "森町",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22461-mori-machi-2022",
+                                title: "森町2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22461-mori-machi-2023",
+                                title: "森町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "焼津市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22212-yaizu-shi-2022",
+                                title: "焼津市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22212-yaizu-shi-2023",
+                                title: "焼津市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "吉田町",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22424-yoshida-cho-2022",
+                                title: "吉田町2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-22424-yoshida-cho-2023",
+                                title: "吉田町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "愛知県",
+                cities: &[
+                    City {
+                        name: "安城市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-23212-anjo-shi-2020",
+                            title: "安城市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "岡崎市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-23202-okazaki-shi-2020",
+                            title: "岡崎市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "春日井市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-23206-kasugai-shi-2022",
+                                title: "春日井市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-23206-kasugai-shi-2023",
+                                title: "春日井市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "津島市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-23208-tsushima-shi-2020",
+                            title: "津島市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "豊川市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-23207-toyokawa-shi-2022",
+                            title: "豊川市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "豊田市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-23211-toyota-shi-2023",
+                            title: "豊田市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "豊橋市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-23201-toyohashi-shi-2023",
+                                title: "豊橋市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-23201-toyohashi-shi-2024",
+                                title: "豊橋市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "名古屋市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-23100-nagoya-shi-2020",
+                                title: "名古屋市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-23100-nagoya-shi-2022",
+                                title: "名古屋市2022",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "日進市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-23230-nisshin-shi-2022",
+                                title: "日進市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-23230-nisshin-shi-2023",
+                                title: "日進市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+    Region {
+        name: "近畿",
+        prefectures: &[
+            Prefecture {
+                name: "三重県",
+                cities: &[
+                    City {
+                        name: "伊勢市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-24203-ise-shi-2024",
+                            title: "伊勢市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "熊野市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-24212-kumano-shi-2022",
+                            title: "熊野市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "四日市市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-24202-yokkaichi-shi-2022",
+                            title: "四日市市2022",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "滋賀県",
+                cities: &[
+                    City {
+                        name: "近江八幡市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-25204-omihachiman-shi-2025",
+                            title: "近江八幡市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "長浜市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-25203-nagahama-shi-2024",
+                            title: "長浜市2024",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "京都府",
+                cities: &[
+                    City {
+                        name: "京都市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-26100-kyoto-shi-2022",
+                                title: "京都市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-26100-kyoto-shi-2023",
+                                title: "京都市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-26100-kyoto-shi-2024",
+                                title: "京都市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-26100-kyoto-shi-2025",
+                                title: "京都市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "舞鶴市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+                            title: "舞鶴市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "与謝野町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-26465-yosano-cho-2025",
+                            title: "与謝野町2025",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "大阪府",
+                cities: &[
+                    City {
+                        name: "池田市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27204-ikeda-shi-2020",
+                                title: "池田市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27204-ikeda-shi-2025",
+                                title: "池田市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "和泉市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-27219-izumi-shi-2023",
+                            title: "和泉市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "大阪市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27100-osaka-shi-2020",
+                                title: "大阪市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27100-osaka-shi-2022",
+                                title: "大阪市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27100-osaka-shi-2024",
+                                title: "大阪市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27100-osaka-shi-2025",
+                                title: "大阪市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "柏原市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-27221-kashiwara-shi-2022",
+                            title: "柏原市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "河内長野市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27216-kawachinagano-shi-2022",
+                                title: "河内長野市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27216-kawachinagano-shi-2023",
+                                title: "河内長野市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27216-kawachinagano-shi-2024",
+                                title: "河内長野市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27216-kawachinagano-shi-2025",
+                                title: "河内長野市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "岸和田市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-27202-kishiwadashi-2024",
+                            title: "岸和田市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "堺市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27140-sakai-shi-2022",
+                                title: "堺市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-27140-sakai-shi-2024",
+                                title: "堺市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "摂津市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-27224-settsu-shi-2020",
+                            title: "摂津市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "高槻市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-27207-takatsuki-shi-2020",
+                            title: "高槻市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "忠岡町",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-27341-tadaoka-cho-2020",
+                            title: "忠岡町2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "豊中市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-27203-toyonaka-shi-2020",
+                            title: "豊中市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "東大阪市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-27227-higashiosaka-shi-2024",
+                            title: "東大阪市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "大阪・関西万博会場",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-27999-osaka-shi-2025",
+                            title: "大阪・関西万博会場",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "兵庫県",
+                cities: &[
+                    City {
+                        name: "朝来市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-28225-asago-shi-2022",
+                            title: "朝来市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "加古川市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-28210-kakogawa-shi-2020",
+                            title: "加古川市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "たつの市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-28229-tatsuno-shi-2023",
+                            title: "たつの市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "姫路市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-28201-himeji-shi-2023",
+                            title: "姫路市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "三木市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-28215-miki-shi-2023",
+                            title: "三木市2023",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "奈良県",
+                cities: &[
+                    City {
+                        name: "香芝市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-29210-kashiba-shi-2025",
+                            title: "香芝市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "三郷町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-29343-sango-cho-2025",
+                            title: "三郷町2025",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "和歌山県",
+                cities: &[
+                    City {
+                        name: "すさみ町",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-30406-susami-cho-2023",
+                                title: "すさみ町2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-30406-susami-cho-2024",
+                                title: "すさみ町2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-30406-susami-cho-2025",
+                                title: "すさみ町2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "太地町",
+                        datasets: &[Dataset {
+                            year: 2021,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-30422-taiji-cho-2021",
+                            title: "太地町2021",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "和歌山市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-30201-wakayama-shi-2022",
+                                title: "和歌山市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-30201-wakayama-shi-2023",
+                                title: "和歌山市2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+    Region {
+        name: "中国",
+        prefectures: &[
+            Prefecture {
+                name: "鳥取県",
+                cities: &[
+                    City {
+                        name: "境港市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-31204-sakaiminato-shi-2022",
+                            title: "境港市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "鳥取市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-31201-tottori-shi-2020",
+                            title: "鳥取市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "日吉津村",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-31384-hiezu-son-2023",
+                            title: "日吉津村2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "米子市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-31202-yonago-shi-2023",
+                                title: "米子市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-31202-yonago-shi-2024",
+                                title: "米子市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "島根県",
+                cities: &[
+                    City {
+                        name: "隠岐の島町",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-32528-okinoshima-cho-2024",
+                            title: "隠岐の島町2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "益田市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-32204-masuda-shi-2024",
+                            title: "益田市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "松江市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-32201-matsue-shi-2024",
+                            title: "松江市2024",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "岡山県",
+                cities: &[
+                    City {
+                        name: "岡山市",
+                        datasets: &[
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-33100-okayama-shi-2024",
+                                title: "岡山市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-33100-okayama-shi-2025",
+                                title: "岡山市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "倉敷市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-33202-kurashiki-shi-2024",
+                            title: "倉敷市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "津山市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-33203-tsuyama-shi-2025",
+                            title: "津山市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "早島町",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-33423-hayashima-cho-2024",
+                            title: "早島町2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "備前市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-33211-bizen-shi-2023",
+                            title: "備前市2023",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "広島県",
+                cities: &[
+                    City {
+                        name: "海田町",
+                        datasets: &[
+                            Dataset {
+                                year: 2021,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-34304-kaita-cho-2021",
+                                title: "海田町2021",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-34304-kaita-cho-2024",
+                                title: "海田町2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-34304-kaita-cho-2025",
+                                title: "海田町2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "呉市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-34202-kure-shi-2020",
+                            title: "呉市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "竹原市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-34203-takehara-shi-2023",
+                            title: "竹原市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "広島市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-34100-hiroshima-shi-2022",
+                                title: "広島市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-34100-hiroshima-shi-2024",
+                                title: "広島市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "福山市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-34207-fukuyama-shi-2020",
+                            title: "福山市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "府中市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-34208-fuchu-shi-2022",
+                            title: "府中市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "三次市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-34209-miyoshi-shi-2022",
+                            title: "三次市2022",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "山口県",
+                cities: &[City {
+                    name: "周南市",
+                    datasets: &[Dataset {
+                        year: 2024,
+                        url: "https://www.geospatial.jp/ckan/dataset/plateau-35215-shunan-shi-2024",
+                        title: "周南市2024",
+                        note: None,
+                    }],
+                }],
+            },
+        ],
+    },
+    Region {
+        name: "四国",
+        prefectures: &[
+            Prefecture {
+                name: "徳島県",
+                cities: &[
+                    City {
+                        name: "徳島市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-36201-tokushima-shi-2023",
+                            title: "徳島市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "美波町",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-36387-minami-cho-2025",
+                            title: "美波町2025",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "香川県",
+                cities: &[
+                    City {
+                        name: "さぬき市",
+                        datasets: &[
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-37206-sanuki-shi-2023",
+                                title: "さぬき市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-37206-sanuki-shi-2024",
+                                title: "さぬき市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "高松市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-37201-takamatsu-shi-2022",
+                            title: "高松市2022",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "愛媛県",
+                cities: &[
+                    City {
+                        name: "宇和島市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-38203-uwajima-shi-2025",
+                            title: "宇和島市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "東温市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-38215-toon-shi-2023",
+                            title: "東温市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "松山市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-38201-matsuyama-shi-2020",
+                            title: "松山市2020",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "高知県",
+                cities: &[
+                    City {
+                        name: "安芸市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-39203-aki-shi-2025",
+                            title: "安芸市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "いの町",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-39386-ino-cho-2024",
+                            title: "いの町2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "高知市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-39201-kouchi-shi-2023",
+                            title: "高知市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "香南市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-39211-konan-shi-2025",
+                            title: "香南市2025",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+        ],
+    },
+    Region {
+        name: "九州・沖縄",
+        prefectures: &[
+            Prefecture {
+                name: "福岡県",
+                cities: &[
+                    City {
+                        name: "飯塚市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-40205-iizuka-shi-2020",
+                            title: "飯塚市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "うきは市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-40225-ukiha-shi-2022",
+                                title: "うきは市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-40225-ukiha-shi-2025",
+                                title: "うきは市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "大牟田市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-40202-omuta-shi-2023",
+                            title: "大牟田市2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "北九州市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-40100-kitakyushu-shi-2020",
+                            title: "北九州市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "久留米市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-40203-kurume-shi-2020",
+                            title: "久留米市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "古賀市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-40223-koga-shi-2024",
+                            title: "古賀市2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "筑前町",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-40447-chikuzen-machi-2023",
+                            title: "筑前町2023",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "福岡市",
+                        datasets: &[
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-40130-fukuoka-shi-2022",
+                                title: "福岡市2022",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-40130-fukuoka-shi-2024",
+                                title: "福岡市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "宗像市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-40220-munakata-shi-2020",
+                            title: "宗像市2020",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "佐賀県",
+                cities: &[
+                    City {
+                        name: "大町町",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-41423-omachi-cho-2022",
+                            title: "大町町2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "小城市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-41208-ogi-shi-2022",
+                            title: "小城市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "江北町",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-41424-kouhoku-machi-2022",
+                            title: "江北町2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "白石町",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-41425-shiroisi-chou-2022",
+                            title: "白石町2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "武雄市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-41206-takeo-shi-2022",
+                            title: "武雄市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "鳥栖市",
+                        datasets: &[
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-41203-tosu-shi-2024",
+                                title: "鳥栖市2024",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2025,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-41203-tosu-shi-2025",
+                                title: "鳥栖市2025",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "長崎県",
+                cities: &[
+                    City {
+                        name: "佐世保市",
+                        datasets: &[Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-42202-sasebo-shi-2022",
+                            title: "佐世保市2022",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "波佐見町",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-42323-hasami-cho-2024",
+                            title: "波佐見町2024",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "松浦市",
+                        datasets: &[Dataset {
+                            year: 2024,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-42208-matsuura-shi-2024",
+                            title: "松浦市2024",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "熊本県",
+                cities: &[
+                    City {
+                        name: "荒尾市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-43204-arao-shi-2020",
+                            title: "荒尾市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "宇城市",
+                        datasets: &[Dataset {
+                            year: 2025,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-43213-uki-shi-2025",
+                            title: "宇城市2025",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "熊本市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-43100-kumamoto-shi-2020",
+                                title: "熊本市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2022,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-43100-kumamoto-shi-2022",
+                                title: "熊本市2022",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "玉名市",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-43206-tamana-shi-2020",
+                                title: "玉名市2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-43206-tamana-shi-2023",
+                                title: "玉名市2023",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2024,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-43206-tamana-shi-2024",
+                                title: "玉名市2024",
+                                note: None,
+                            },
+                        ],
+                    },
+                    City {
+                        name: "益城町",
+                        datasets: &[
+                            Dataset {
+                                year: 2020,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-43443-mashiki-machi-2020",
+                                title: "益城町2020",
+                                note: None,
+                            },
+                            Dataset {
+                                year: 2023,
+                                url: "https://www.geospatial.jp/ckan/dataset/plateau-43443-mashiki-machi-2023",
+                                title: "益城町2023",
+                                note: None,
+                            },
+                        ],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "大分県",
+                cities: &[
+                    City {
+                        name: "臼杵市",
+                        datasets: &[Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-44206-usuki-shi-2023",
+                            title: "臼杵市2020",
+                            note: None,
+                        }],
+                    },
+                    City {
+                        name: "日田市",
+                        datasets: &[Dataset {
+                            year: 2020,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-44204-hita-shi-2020",
+                            title: "日田市2020",
+                            note: None,
+                        }],
+                    },
+                ],
+            },
+            Prefecture {
+                name: "宮崎県",
+                cities: &[City {
+                    name: "延岡市",
+                    datasets: &[
+                        Dataset {
+                            year: 2022,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-45203-nobeoka-shi-2022",
+                            title: "延岡市2022",
+                            note: None,
+                        },
+                        Dataset {
+                            year: 2023,
+                            url: "https://www.geospatial.jp/ckan/dataset/plateau-45203-nobeoka-shi-2023",
+                            title: "延岡市2023",
+                            note: None,
+                        },
+                    ],
+                }],
+            },
+            Prefecture {
+                name: "鹿児島県",
+                cities: &[City {
+                    name: "南さつま市",
+                    datasets: &[Dataset {
+                        year: 2024,
+                        url: "https://www.geospatial.jp/ckan/dataset/plateau-46220-minamisatsuma-shi-2024",
+                        title: "南さつま市2024",
+                        note: None,
+                    }],
+                }],
+            },
+            Prefecture {
+                name: "沖縄県",
+                cities: &[City {
+                    name: "那覇市",
+                    datasets: &[Dataset {
+                        year: 2020,
+                        url: "https://www.geospatial.jp/ckan/dataset/plateau-47201-naha-shi-2020",
+                        title: "那覇市2020",
+                        note: None,
+                    }],
+                }],
+            },
+        ],
+    },
+];
+
+/// 全国分のPLATEAUのデータリストを取得する関数
+pub fn list() -> &'static [Region] {
+    REGIONS
+}

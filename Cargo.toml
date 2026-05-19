@@ -1,5 +1,5 @@
 [package]
-name = "PLATEAU-Data-Kasane-Inserter"
+name = "plateau_data_kasane_inserter"
 version = "0.1.0"
 edition = "2024"
 
