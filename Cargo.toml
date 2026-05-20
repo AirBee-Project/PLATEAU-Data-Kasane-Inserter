@@ -12,6 +12,8 @@ zip = "2.1"
 tempfile = "3.10"
 thiserror = "2"
 indicatif = "0.17"
+nazori = { git = "https://github.com/AirBee-Project/Nazori", branch = "main"}
+
 
 [profile.dev]
 opt-level = 1

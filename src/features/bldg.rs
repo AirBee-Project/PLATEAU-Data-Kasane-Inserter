@@ -1,29 +1,41 @@
-use std::path::{Path, PathBuf};
 use crate::error::AppError;
+use std::path::{Path, PathBuf};
 
 /// bldg ディレクトリ内の各GMLファイルを並列処理します
 pub async fn process_directory(dir: PathBuf) -> Result<(), AppError> {
     let mut tasks = Vec::new();
-    if let Ok(entries) = std::fs::read_dir(dir) {
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if path.is_file() && path.extension().map_or(false, |ext| ext == "gml") {
-                let handle = tokio::spawn(async move {
-                    if let Err(e) = process_gml_file(&path).await {
-                        eprintln!(
-                            "[bldg] ファイル {:?} の処理中にエラーが発生しました: {}",
-                            path.file_name().unwrap_or_default(),
-                            e
-                        );
-                    }
-                });
-                tasks.push(handle);
-            }
+    let entries = std::fs::read_dir(dir)?;
+
+    for entry in entries {
+        let entry = entry?;
+        let path = entry.path();
+        if path.is_file() && path.extension().is_some_and(|ext| ext == "gml") {
+            let handle = tokio::spawn(async move { process_gml_file(&path).await });
+            tasks.push(handle);
         }
     }
+
+    let mut first_error = None;
     for t in tasks {
-        let _ = t.await;
+        match t.await {
+            Ok(Err(e)) => {
+                if first_error.is_none() {
+                    first_error = Some(e);
+                }
+            }
+            Err(e) => {
+                if first_error.is_none() {
+                    first_error = Some(AppError::Join(e));
+                }
+            }
+            Ok(Ok(())) => {}
+        }
     }
+
+    if let Some(e) = first_error {
+        return Err(e);
+    }
+
     Ok(())
 }
 

@@ -22,4 +22,7 @@ pub enum AppError {
 
     #[error("Other error: {0}")]
     Other(String),
+
+    #[error("Nazori error{0}")]
+    Nazori(nazori::Error),
 }

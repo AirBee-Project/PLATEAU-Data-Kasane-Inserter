@@ -65,10 +65,8 @@ impl CityList {
         } else {
             let response = reqwest::get(url).await?;
             let bytes = response.bytes().await?;
-            if let Some(parent) = cache_path.parent() {
-                if !parent.as_os_str().is_empty() {
-                    fs::create_dir_all(parent)?;
-                }
+            if let Some(parent) = cache_path.parent().filter(|p| !p.as_os_str().is_empty()) {
+                fs::create_dir_all(parent)?;
             }
             fs::write(cache_path, &bytes)?;
             bytes.to_vec()

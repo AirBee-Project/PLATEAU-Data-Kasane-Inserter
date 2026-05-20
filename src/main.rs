@@ -21,8 +21,9 @@ async fn main() {
     let cities_to_process = city_list.cities().to_vec();
     println!("処理対象の都市数: {}", cities_to_process.len());
 
-    // 2. スケジューラの初期化 (並列実行数: 2, デフォルトのキャッシュ設定 "cache/download_cache" 上限5GBを使用)
-    let scheduler = Scheduler::new(cities_to_process, 2);
+    // 2. スケジューラの初期化 (並列実行数: 2, キャッシュ上限: 5GB)
+    let max_cache_size_bytes = 5 * 1024 * 1024 * 1024; // 5 GB
+    let scheduler = Scheduler::new(cities_to_process, 2, max_cache_size_bytes);
 
     // 3. 並列ダウンロードおよび展開・処理の開始
     println!("並列ダウンロードおよび展開・処理を開始します...");
@@ -48,17 +49,17 @@ async fn main() {
         // FeatureType 別の処理を別スレッドかつ並列で実行
         let bldg_handle = tokio::spawn(async move {
             if bldg_dir.is_dir() {
-                if let Err(e) = bldg::process_directory(bldg_dir).await {
+                let _ = bldg::process_directory(bldg_dir).await.map_err(|e| {
                     eprintln!("bldgディレクトリの処理エラー: {}", e);
-                }
+                });
             }
         });
 
         let tran_handle = tokio::spawn(async move {
             if tran_dir.is_dir() {
-                if let Err(e) = tran::process_directory(tran_dir).await {
+                let _ = tran::process_directory(tran_dir).await.map_err(|e| {
                     eprintln!("tranディレクトリの処理エラー: {}", e);
-                }
+                });
             }
         });
 
@@ -81,7 +82,7 @@ fn find_udx_dir(root: &Path) -> Option<PathBuf> {
     }
     if let Ok(entries) = std::fs::read_dir(root) {
         for entry in entries.flatten() {
-            if entry.file_type().map_or(false, |ft| ft.is_dir()) {
+            if entry.file_type().is_ok_and(|ft| ft.is_dir()) {
                 let path = entry.path().join("udx");
                 if path.is_dir() {
                     return Some(path);
