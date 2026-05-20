@@ -30,7 +30,7 @@ impl Scheduler {
     /// 各都市のデータを並列でダウンロード・展開し、ユーザー提供のハンドラ関数を呼び出します。
     pub async fn run<F, Fut>(&self, handler: F) -> Result<(), AppError>
     where
-        F: Fn(CityGml, PathBuf) -> Fut + Clone + Send + Sync + 'static,
+        F: Fn(CityGml, PathBuf, Arc<indicatif::MultiProgress>) -> Fut + Clone + Send + Sync + 'static,
         Fut: std::future::Future<Output = Result<(), AppError>> + Send + 'static,
     {
         let semaphore = Arc::new(Semaphore::new(self.concurrency_limit));
@@ -80,7 +80,7 @@ async fn process_city<F, Fut>(
     handler: F,
 ) -> Result<(), AppError>
 where
-    F: Fn(CityGml, PathBuf) -> Fut + Send + Sync + 'static,
+    F: Fn(CityGml, PathBuf, Arc<indicatif::MultiProgress>) -> Fut + Send + Sync + 'static,
     Fut: std::future::Future<Output = Result<(), AppError>> + Send + 'static,
 {
     // 1. ZIPファイルの取得 (キャッシュ)
@@ -96,18 +96,18 @@ where
         // 3. ZIPファイルを展開 (ブロック処理のため spawn_blocking を使用)
         let zip_path_clone = zip_path.clone();
         let extract_path_clone = extract_path.clone();
-        let city_name = city.city.clone();
+        let pref_city = format!("{}{}", city.pref, city.city);
+        let mp_clone = mp.clone();
         tokio::task::spawn_blocking(move || {
-            info!("ZIPファイルを展開中: {}...", city_name);
-            extract_zip(&zip_path_clone, &extract_path_clone)
+            extract_zip(&zip_path_clone, &extract_path_clone, &pref_city, mp_clone)
         })
         .await??;
     } else {
-        info!("展開キャッシュヒット: {} (フォルダ: {:?})", city.city, extract_path);
+        info!("展開キャッシュヒット: {}{} (フォルダ: {:?})", city.pref, city.city, extract_path);
     }
 
     // 4. ユーザー定義の処理を実行
-    let run_result = handler(city.clone(), extract_path.clone()).await;
+    let run_result = handler(city.clone(), extract_path.clone(), mp.clone()).await;
 
     // 5. 不要な一時ファイルのクリーンアップは行わない (展開結果をキャッシュとして残すため)
 
@@ -127,7 +127,7 @@ async fn get_zip_file(
 
     // キャッシュに存在する場合はそれを使用
     if cached_path.exists() {
-        info!("キャッシュヒット: {} (ファイル: {:?})", city.city, cached_path);
+        info!("キャッシュヒット: {}{} (ファイル: {:?})", city.pref, city.city, cached_path);
         if let Ok(file) = fs::OpenOptions::new().write(true).open(&cached_path) {
             let _ = file.set_modified(std::time::SystemTime::now());
         }
@@ -135,12 +135,13 @@ async fn get_zip_file(
     }
 
     // キャッシュに存在しない場合は一時名でダウンロード後にリネーム
-    info!("キャッシュミス: {}。ダウンロードを開始します...", city.city);
+    let pref_city = format!("{}{}", city.pref, city.city);
+    info!("キャッシュミス: {}。ダウンロードを開始します...", pref_city);
     let temp_download_path = cache_dir.join(format!("{}.download", filename));
 
     fs::create_dir_all(cache_dir)?;
 
-    download_url_to_file(&city.url, &temp_download_path, &filename, mp.clone()).await?;
+    download_url_to_file(&city.url, &temp_download_path, &pref_city, mp.clone()).await?;
     fs::rename(&temp_download_path, &cached_path)?;
 
     // キャッシュサイズが上限を超えていれば古い順にクリーンアップ
@@ -153,7 +154,7 @@ async fn get_zip_file(
 async fn download_url_to_file(
     url: &str,
     path: &Path,
-    filename: &str,
+    pref_city: &str,
     mp: Arc<indicatif::MultiProgress>,
 ) -> Result<(), AppError> {
     let response = reqwest::get(url).await?;
@@ -174,7 +175,7 @@ async fn download_url_to_file(
             .unwrap()
             .progress_chars("#>-"),
     );
-    pb.set_message(filename.to_string());
+    pb.set_message(format!("ダウンロード中: {}", pref_city));
 
     let mut file = tokio::fs::File::create(path).await?;
     let mut response = response;
@@ -184,30 +185,59 @@ async fn download_url_to_file(
         pb.inc(chunk.len() as u64);
     }
 
-    pb.finish_with_message(format!("{} (ダウンロード完了)", filename));
+    pb.finish_with_message(format!("ダウンロード完了: {}", pref_city));
     Ok(())
 }
 
 /// ZIPファイルを指定フォルダに展開します
-fn extract_zip(zip_path: &Path, extract_path: &Path) -> Result<(), AppError> {
+fn extract_zip(
+    zip_path: &Path,
+    extract_path: &Path,
+    pref_city: &str,
+    mp: Arc<indicatif::MultiProgress>,
+) -> Result<(), AppError> {
     let file = fs::File::open(zip_path)?;
     let mut archive = zip::ZipArchive::new(file)?;
+    let total_files = archive.len();
 
-    for i in 0..archive.len() {
-        let mut file = archive.by_index(i)?;
+    let pb = mp.add(indicatif::ProgressBar::new(total_files as u64));
+    pb.set_style(
+        indicatif::ProgressStyle::default_bar()
+            .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} files ({eta}) - {msg}")
+            .unwrap()
+            .progress_chars("#>-"),
+    );
+    pb.set_message(format!("展開中: {}", pref_city));
+
+    // 親ディレクトリ作成の不要なexists/create_dir_allシステムコール削減用キャッシュ
+    let mut created_dirs = std::collections::HashSet::new();
+
+    for i in 0..total_files {
+        let file = archive.by_index(i)?;
         let outpath = match file.enclosed_name() {
             Some(path) => extract_path.join(path),
             None => continue,
         };
 
         if file.name().ends_with('/') {
-            fs::create_dir_all(&outpath)?;
-        } else {
-            if let Some(p) = outpath.parent().filter(|p| !p.exists()) {
-                fs::create_dir_all(p)?;
+            if created_dirs.insert(outpath.clone()) {
+                fs::create_dir_all(&outpath)?;
             }
-            let mut outfile = fs::File::create(&outpath)?;
-            io::copy(&mut file, &mut outfile)?;
+        } else {
+            if let Some(p) = outpath.parent() {
+                if !created_dirs.contains(p) {
+                    if !p.exists() {
+                        fs::create_dir_all(p)?;
+                    }
+                    created_dirs.insert(p.to_path_buf());
+                }
+            }
+            // バッファリングを使用してディスク書き込みおよび展開処理を高速化
+            let mut reader = std::io::BufReader::with_capacity(64 * 1024, file);
+            let mut outfile = std::io::BufWriter::with_capacity(64 * 1024, fs::File::create(&outpath)?);
+            std::io::copy(&mut reader, &mut outfile)?;
+            use std::io::Write;
+            outfile.flush()?;
         }
 
         #[cfg(unix)]
@@ -217,8 +247,10 @@ fn extract_zip(zip_path: &Path, extract_path: &Path) -> Result<(), AppError> {
                 fs::set_permissions(&outpath, fs::Permissions::from_mode(mode))?;
             }
         }
+        pb.inc(1);
     }
 
+    pb.finish_with_message(format!("展開完了: {}", pref_city));
     Ok(())
 }
 

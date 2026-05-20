@@ -1018,7 +1018,7 @@ dependencies = [
 [[package]]
 name = "nazori"
 version = "0.1.0"
-source = "git+https://github.com/AirBee-Project/Nazori?branch=main#4fa61243a9d67787b8ee425b203c0324d9892535"
+source = "git+https://github.com/AirBee-Project/Nazori?branch=main#b5da5224b89285e1d79d0f71b55fa65eeca5315a"
 dependencies = [
  "getrandom 0.3.4",
  "kasane-logic",
