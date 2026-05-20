@@ -40,6 +40,8 @@ pub struct CityGml {
     pub year: String,
 }
 
+const CATALOG_URL: &str = "https://api.plateauview.mlit.go.jp/datacatalog/plateau-datasets";
+
 /// JSONデータをキャッシュし、都市データをイテレートする型
 pub struct CityList {
     cities: Vec<CityGml>,
@@ -49,21 +51,20 @@ pub struct CityList {
 impl CityList {
     /// キャッシュが存在すればそこから、なければURLからデータを取得してキャッシュを作成し、CityListを初期化します。
     /// キャッシュファイル名はデフォルトで "plateau_cache.json" になります。
-    pub async fn new(url: &str) -> Result<Self, crate::error::AppError> {
-        Self::new_with_cache_path("cache/plateau_cache.json", url).await
+    pub async fn new() -> Result<Self, crate::error::AppError> {
+        Self::new_with_cache_path("cache/plateau_cache.json").await
     }
 
     /// カスタムキャッシュパスを指定してCityListを初期化します。
     pub async fn new_with_cache_path<P: AsRef<Path>>(
         cache_path: P,
-        url: &str,
     ) -> Result<Self, crate::error::AppError> {
         let cache_path = cache_path.as_ref();
 
         let bytes = if cache_path.exists() {
             fs::read(cache_path)?
         } else {
-            let response = reqwest::get(url).await?;
+            let response = reqwest::get(CATALOG_URL).await?;
             let bytes = response.bytes().await?;
             if let Some(parent) = cache_path.parent().filter(|p| !p.as_os_str().is_empty()) {
                 fs::create_dir_all(parent)?;

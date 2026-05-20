@@ -5,13 +5,14 @@ use plateau_data_kasane_inserter::features::{bldg, tran};
 
 #[tokio::main]
 async fn main() {
-    let url = "https://api.plateauview.mlit.go.jp/datacatalog/plateau-datasets";
+    // tracing-subscriber を初期化 (RUST_LOG 環境変数を参照します)
+    tracing_subscriber::fmt::init();
 
     // 1. 都市の一覧を取得 (デフォルトで "cache/plateau_cache.json" をキャッシュに使用)
-    let city_list = match CityList::new(url).await {
+    let city_list = match CityList::new().await {
         Ok(list) => list,
         Err(e) => {
-            eprintln!("都市一覧の取得に失敗しました: {}", e);
+            tracing::error!("都市一覧の取得に失敗しました: {}", e);
             return;
         }
     };
@@ -19,25 +20,22 @@ async fn main() {
     // 件数制限を設定 (デバッグが容易になるよう、最初の3件のみに制限)
     let city_list = city_list.take(3);
     let cities_to_process = city_list.cities().to_vec();
-    println!("処理対象の都市数: {}", cities_to_process.len());
+    tracing::info!("処理対象の都市数: {}", cities_to_process.len());
 
     // 2. スケジューラの初期化 (並列実行数: 2, キャッシュ上限: 5GB)
     let max_cache_size_bytes = 5 * 1024 * 1024 * 1024; // 5 GB
     let scheduler = Scheduler::new(cities_to_process, 2, max_cache_size_bytes);
 
     // 3. 並列ダウンロードおよび展開・処理の開始
-    println!("並列ダウンロードおよび展開・処理を開始します...");
+    tracing::info!("並列ダウンロードおよび展開・処理を開始します...");
     let result = scheduler.run(|city, extracted_path| async move {
-        println!(
-            "\n[USER PROCESS] >>> 都市: {} ({}) の処理を開始します。",
-            city.city, city.id
-        );
+        tracing::info!("都市: {} ({}) の処理を開始します", city.city, city.id);
 
         // udxディレクトリを探索
         let udx_dir = match find_udx_dir(&extracted_path) {
             Some(path) => path,
             None => {
-                eprintln!("[USER PROCESS] udxディレクトリが見つかりませんでした: {:?}", extracted_path);
+                tracing::warn!("udxディレクトリが見つかりませんでした: {:?}", extracted_path);
                 return Ok(());
             }
         };
@@ -46,32 +44,32 @@ async fn main() {
         let bldg_dir = udx_dir.join("bldg");
         let tran_dir = udx_dir.join("tran");
 
-        // FeatureType 別の処理を別スレッドかつ並列で実行
-        let bldg_handle = tokio::spawn(async move {
+        // FeatureType 別の処理を tokio::try_join! で非同期並列実行 (スレッド生成なし)
+        let bldg_fut = async {
             if bldg_dir.is_dir() {
-                let _ = bldg::process_directory(bldg_dir).await.map_err(|e| {
-                    eprintln!("bldgディレクトリの処理エラー: {}", e);
-                });
+                bldg::process_directory(bldg_dir).await
+            } else {
+                Ok(())
             }
-        });
+        };
 
-        let tran_handle = tokio::spawn(async move {
+        let tran_fut = async {
             if tran_dir.is_dir() {
-                let _ = tran::process_directory(tran_dir).await.map_err(|e| {
-                    eprintln!("tranディレクトリの処理エラー: {}", e);
-                });
+                tran::process_directory(tran_dir).await
+            } else {
+                Ok(())
             }
-        });
+        };
 
-        let _ = tokio::join!(bldg_handle, tran_handle);
+        tokio::try_join!(bldg_fut, tran_fut)?;
 
-        println!("[USER PROCESS] >>> 都市: {} ({}) の処理が終了しました。\n", city.city, city.id);
+        tracing::info!("都市: {} ({}) の処理が終了しました", city.city, city.id);
         Ok(())
     }).await;
 
     match result {
-        Ok(_) => println!("すべての都市の処理が完了しました！"),
-        Err(e) => eprintln!("実行中にエラーが発生しました: {}", e),
+        Ok(_) => tracing::info!("すべての都市の処理が完了しました！"),
+        Err(e) => tracing::error!("実行中にエラーが発生しました: {}", e),
     }
 }
 

@@ -5,6 +5,7 @@ use std::io;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use tokio::sync::Semaphore;
+use tracing::{info, warn, error};
 
 // デフォルトのキャッシュフォルダ定義
 const CACHE_DIR: &str = "cache/download_cache";
@@ -49,21 +50,13 @@ impl Scheduler {
 
             let handle = tokio::spawn(async move {
                 let _permit = permit; // タスク完了までパーミットを保持する
-                let _ = mp.println(format!(
-                    "都市の処理を開始します: {} ({})",
-                    city.city, city.id
-                ));
+                info!("都市の処理を開始します: {} ({})", city.city, city.id);
+                
                 let res = process_city(&city, max_cache_size, mp.clone(), handler).await;
                 if let Err(ref e) = res {
-                    let _ = mp.println(format!(
-                        "都市 {} ({}) の処理中にエラーが発生しました: {}",
-                        city.city, city.id, e
-                    ));
+                    error!("都市 {} ({}) の処理中にエラーが発生しました: {}", city.city, city.id, e);
                 } else {
-                    let _ = mp.println(format!(
-                        "都市の処理が完了しました: {} ({})",
-                        city.city, city.id
-                    ));
+                    info!("都市の処理が完了しました: {} ({})", city.city, city.id);
                 }
                 res
             });
@@ -103,18 +96,14 @@ where
         // 3. ZIPファイルを展開 (ブロック処理のため spawn_blocking を使用)
         let zip_path_clone = zip_path.clone();
         let extract_path_clone = extract_path.clone();
-        let mp_clone = mp.clone();
         let city_name = city.city.clone();
         tokio::task::spawn_blocking(move || {
-            let _ = mp_clone.println(format!("ZIPファイルを展開中: {}...", city_name));
+            info!("ZIPファイルを展開中: {}...", city_name);
             extract_zip(&zip_path_clone, &extract_path_clone)
         })
         .await??;
     } else {
-        let _ = mp.println(format!(
-            "展開キャッシュヒット: {} (フォルダ: {:?})",
-            city.city, extract_path
-        ));
+        info!("展開キャッシュヒット: {} (フォルダ: {:?})", city.city, extract_path);
     }
 
     // 4. ユーザー定義の処理を実行
@@ -138,10 +127,7 @@ async fn get_zip_file(
 
     // キャッシュに存在する場合はそれを使用
     if cached_path.exists() {
-        let _ = mp.println(format!(
-            "キャッシュヒット: {} (ファイル: {:?})",
-            city.city, cached_path
-        ));
+        info!("キャッシュヒット: {} (ファイル: {:?})", city.city, cached_path);
         if let Ok(file) = fs::OpenOptions::new().write(true).open(&cached_path) {
             let _ = file.set_modified(std::time::SystemTime::now());
         }
@@ -149,10 +135,7 @@ async fn get_zip_file(
     }
 
     // キャッシュに存在しない場合は一時名でダウンロード後にリネーム
-    let _ = mp.println(format!(
-        "キャッシュミス: {}。ダウンロードを開始します...",
-        city.city
-    ));
+    info!("キャッシュミス: {}。ダウンロードを開始します...", city.city);
     let temp_download_path = cache_dir.join(format!("{}.download", filename));
 
     fs::create_dir_all(cache_dir)?;
@@ -161,7 +144,7 @@ async fn get_zip_file(
     fs::rename(&temp_download_path, &cached_path)?;
 
     // キャッシュサイズが上限を超えていれば古い順にクリーンアップ
-    evict_cache(max_cache_size_bytes, mp)?;
+    evict_cache(max_cache_size_bytes)?;
 
     Ok(cached_path)
 }
@@ -259,10 +242,7 @@ fn dir_size(path: &Path) -> io::Result<u64> {
 
 /// 古いキャッシュファイルを削除して制限サイズ以下に保ちます (LRUライク)
 /// ZIPファイルと展開先フォルダの両方の容量を含めて判定し、削除時は両方を削除します。
-fn evict_cache(
-    max_cache_size_bytes: u64,
-    mp: Arc<indicatif::MultiProgress>,
-) -> Result<(), AppError> {
+fn evict_cache(max_cache_size_bytes: u64) -> Result<(), AppError> {
     let cache_dir = Path::new(CACHE_DIR);
     if !cache_dir.exists() {
         return Ok(());
@@ -318,10 +298,10 @@ fn evict_cache(
     }
 
     if total_size > max_cache_size_bytes {
-        let _ = mp.println(format!(
+        info!(
             "キャッシュ制限を超過しました。現在: {} bytes > 制限: {} bytes. 古いファイルを削除します...",
             total_size, max_cache_size_bytes
-        ));
+        );
         items.sort_by_key(|item| item.modified); // 更新日時順 (古い順)
 
         for item in items {
@@ -329,27 +309,27 @@ fn evict_cache(
                 break;
             }
 
-            let _ = mp.println(format!(
+            info!(
                 "キャッシュを削除します: ZIP: {:?}, 展開フォルダ: {:?}",
                 item.zip_path, item.ext_dir
-            ));
+            );
 
             // ZIPファイルを削除
             if let Err(e) = fs::remove_file(&item.zip_path) {
-                let _ = mp.println(format!(
+                warn!(
                     "警告: ZIPファイル ({:?}) の削除に失敗しました: {}",
                     item.zip_path, e
-                ));
+                );
             } else {
                 total_size -= item.size;
 
                 // 対応する展開フォルダも削除
                 if item.ext_dir.exists() {
                     let _ = fs::remove_dir_all(&item.ext_dir).map_err(|e| {
-                        let _ = mp.println(format!(
+                        warn!(
                             "警告: 展開フォルダ ({:?}) の削除に失敗しました: {}",
                             item.ext_dir, e
-                        ));
+                        );
                     });
                 }
             }
