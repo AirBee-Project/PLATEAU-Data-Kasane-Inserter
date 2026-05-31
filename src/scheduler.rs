@@ -86,9 +86,10 @@ where
     // 1. ZIPファイルの取得 (キャッシュ)
     let zip_path = get_zip_file(city, max_cache_size_bytes, mp.clone()).await?;
 
-    // 2. 展開先フォルダのパス設定とチェック
+    // 2. 展開先フォルダのパス設定とマーカーのチェック
     let extract_path = PathBuf::from("cache/temp_extracted").join(format!("city_{}", city.id));
-    let is_extracted = extract_path.exists();
+    let marker_path = extract_path.join(".extracted_success");
+    let is_extracted = marker_path.exists();
 
     if !is_extracted {
         fs::create_dir_all(&extract_path)?;
@@ -102,6 +103,8 @@ where
             extract_zip(&zip_path_clone, &extract_path_clone, &pref_city, mp_clone)
         })
         .await??;
+        
+        fs::File::create(&marker_path)?;
     } else {
         info!("展開キャッシュヒット: {}{} (フォルダ: {:?})", city.pref, city.city, extract_path);
     }
@@ -297,7 +300,7 @@ fn evict_cache(max_cache_size_bytes: u64) -> Result<(), AppError> {
         let metadata = entry.metadata()?;
         if metadata.is_file() {
             let path = entry.path();
-            if path.extension().is_some_and(|ext| ext == "download") {
+            if !path.extension().is_some_and(|ext| ext == "zip") {
                 continue;
             }
             let modified = metadata
@@ -310,7 +313,11 @@ fn evict_cache(max_cache_size_bytes: u64) -> Result<(), AppError> {
                 .map(|s| s.to_string_lossy().into_owned())
                 .unwrap_or_default();
             // 例: "01-01205" から "01205" を抽出する
-            let city_id = stem.split('-').nth(1).unwrap_or("");
+            let city_id_opt = stem.split('-').nth(1);
+            let city_id = match city_id_opt {
+                Some(id) if !id.is_empty() => id,
+                _ => continue,
+            };
 
             // 対応する展開フォルダの容量も合算する
             let mut ext_size = 0;

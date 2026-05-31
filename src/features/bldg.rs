@@ -8,12 +8,14 @@ async fn process_gml_file(path: &Path) -> Result<(), AppError> {
 
     let ids = tokio::task::spawn_blocking(move || {
         let mut ids = Vec::new();
-        match nazori::plateau::bldg(&content, 25, 0.0) {
+        match nazori::plateau::bldg_range(&content, 25, 0.0) {
             Ok(v) => {
                 for ele in v {
                     match ele {
                         Ok(id) => ids.push(id.to_string()),
-                        Err(e) => tracing::error!("時空間ID変換エラー {:?}: {}", path_clone.display(), e),
+                        Err(e) => {
+                            tracing::error!("時空間ID変換エラー {:?}: {}", path_clone.display(), e)
+                        }
                     }
                 }
             }
@@ -26,7 +28,7 @@ async fn process_gml_file(path: &Path) -> Result<(), AppError> {
     let output_path = path.with_extension("txt");
     tokio::fs::write(&output_path, ids.join(",")).await?;
     tracing::info!("保存完了: {:?} ({}件)", output_path, ids.len());
-    
+
     Ok(())
 }
 

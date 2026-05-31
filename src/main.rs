@@ -17,14 +17,28 @@ async fn main() {
         }
     };
 
-    // 処理する都市データを3件に制限
-    let city_list = city_list.take(3);
+    // 処理する都市データを環境変数から取得 (デフォルト10件)
+    let city_limit = std::env::var("CITY_LIMIT")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(10);
+    let city_list = city_list.take(city_limit);
     let cities_to_process = city_list.cities().to_vec();
     tracing::info!("処理対象の都市数: {}", cities_to_process.len());
 
-    // CityGMLのダウンロードを実行
-    // 現在の設定では5並列,100GBのキャッシュ
-    let scheduler = Scheduler::new(cities_to_process, 5, 100 * 1024 * 1024 * 1024);
+    // 都市の並列処理数を環境変数から取得 (デフォルト1)
+    // Rayonが内部でCPUコアを全使用するため、都市ごとの並列数は1が最も効率的です。
+    let city_concurrency = std::env::var("CITY_CONCURRENCY")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(2);
+
+    // CityGMLのダウンロードと処理を実行
+    let scheduler = Scheduler::new(
+        cities_to_process,
+        city_concurrency,
+        100 * 1024 * 1024 * 1024,
+    );
 
     // ダウンロードが完了した都市から処理を開始
     let result = scheduler
