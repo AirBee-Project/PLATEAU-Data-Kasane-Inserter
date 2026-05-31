@@ -17,21 +17,20 @@ async fn main() {
         }
     };
 
-    // 処理する都市データを環境変数から取得 (デフォルト10件)
+    // 処理する都市データを環境変数から取得
     let city_limit = std::env::var("CITY_LIMIT")
         .ok()
         .and_then(|v| v.parse().ok())
-        .unwrap_or(10);
+        .unwrap_or(20);
     let city_list = city_list.take(city_limit);
     let cities_to_process = city_list.cities().to_vec();
     tracing::info!("処理対象の都市数: {}", cities_to_process.len());
 
-    // 都市の並列処理数を環境変数から取得 (デフォルト1)
-    // Rayonが内部でCPUコアを全使用するため、都市ごとの並列数は1が最も効率的です。
+    // 都市の並列処理数を環境変数から取得
     let city_concurrency = std::env::var("CITY_CONCURRENCY")
         .ok()
         .and_then(|v| v.parse().ok())
-        .unwrap_or(2);
+        .unwrap_or(3);
 
     // CityGMLのダウンロードと処理を実行
     let scheduler = Scheduler::new(
