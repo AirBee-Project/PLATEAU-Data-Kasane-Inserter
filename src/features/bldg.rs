@@ -15,13 +15,21 @@ async fn process_gml_file(path: &Path) -> Result<(), AppError> {
                         ids.push(v.to_string());
                     }
                     Err(e) => {
-                        tracing::error!("ファイル {:?} の時空間ID変換エラーが発生しました: {}", path.display(), e);
+                        tracing::error!(
+                            "ファイル {:?} の時空間ID変換エラーが発生しました: {}",
+                            path.display(),
+                            e
+                        );
                     }
                 }
             }
         }
         Err(e) => {
-            tracing::error!("ファイル {:?} のデータパースエラーが発生しました: {}", path.display(), e);
+            tracing::error!(
+                "ファイル {:?} のデータパースエラーが発生しました: {}",
+                path.display(),
+                e
+            );
         }
     }
 

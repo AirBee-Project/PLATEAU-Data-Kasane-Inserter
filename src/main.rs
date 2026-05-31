@@ -5,10 +5,10 @@ use std::path::{Path, PathBuf};
 
 #[tokio::main]
 async fn main() {
-    // tracing-subscriber を初期化 (RUST_LOG 環境変数を参照します)
+    // ログを初期化
     tracing_subscriber::fmt::init();
 
-    // 1. 都市の一覧を取得 (デフォルトで "cache/plateau_cache.json" をキャッシュに使用)
+    // 都市データの一覧を取得
     let city_list = match CityList::new().await {
         Ok(list) => list,
         Err(e) => {
@@ -17,23 +17,21 @@ async fn main() {
         }
     };
 
-    // 件数制限を設定 (デバッグが容易になるよう、最初の3件のみに制限)
+    // 処理する都市データを3件に制限
     let city_list = city_list.take(3);
     let cities_to_process = city_list.cities().to_vec();
     tracing::info!("処理対象の都市数: {}", cities_to_process.len());
 
-    // 2. スケジューラの初期化 (並列実行数: 2, キャッシュ上限: 5GB)
-    let max_cache_size_bytes = 100 * 1024 * 1024 * 1024; // 5 GB
-    let scheduler = Scheduler::new(cities_to_process, 2, max_cache_size_bytes);
+    // CityGMLのダウンロードを実行
+    // 現在の設定では5並列,100GBのキャッシュ
+    let scheduler = Scheduler::new(cities_to_process, 5, 100 * 1024 * 1024 * 1024);
 
-    // 3. 並列ダウンロードおよび展開・処理の開始
-    tracing::info!("並列ダウンロードおよび展開・処理を開始します...");
+    // ダウンロードが完了した都市から処理を開始
     let result = scheduler
         .run(|city, extracted_path, mp| async move {
-            tracing::info!("都市: {} ({}) の処理を開始します", city.city, city.id);
+            tracing::info!("都市: {} ({}) の処理を開始", city.city, city.id);
             let pref_city = format!("{}{}", city.pref, city.city);
 
-            // udxディレクトリを探索
             let udx_dir = match find_udx_dir(&extracted_path) {
                 Some(path) => path,
                 None => {
@@ -45,14 +43,12 @@ async fn main() {
                 }
             };
 
-            // bldg と tran のフォルダパスを取得
             let bldg_dir = udx_dir.join("bldg");
             let tran_dir = udx_dir.join("tran");
 
             let mp_bldg = mp.clone();
             let mp_tran = mp;
 
-            // FeatureType 別の処理を tokio::try_join! で非同期並列実行 (スレッド生成なし)
             let bldg_fut = async {
                 if bldg_dir.is_dir() {
                     bldg::process_directory(bldg_dir, &pref_city, mp_bldg).await
@@ -82,7 +78,7 @@ async fn main() {
     }
 }
 
-/// 展開フォルダ内から udx ディレクトリを探します (ネスト対応)
+/// 展開フォルダ内から udx ディレクトリを探す関数
 fn find_udx_dir(root: &Path) -> Option<PathBuf> {
     if root.join("udx").is_dir() {
         return Some(root.join("udx"));
