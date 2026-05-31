@@ -145,7 +145,9 @@ async fn get_zip_file(
     fs::rename(&temp_download_path, &cached_path)?;
 
     // キャッシュサイズが上限を超えていれば古い順にクリーンアップ
-    evict_cache(max_cache_size_bytes)?;
+    tokio::task::spawn_blocking(move || {
+        evict_cache(max_cache_size_bytes)
+    }).await??;
 
     Ok(cached_path)
 }
