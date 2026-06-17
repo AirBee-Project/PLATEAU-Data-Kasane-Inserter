@@ -25,4 +25,13 @@ pub enum AppError {
 
     #[error("Nazori error{0}")]
     Nazori(#[from] nazori::Error),
+
+    #[error("Kasane authentication failed")]
+    Auth,
+
+    #[error("Kasane API error: status={status}, body={body}")]
+    KasaneApi {
+        status: reqwest::StatusCode,
+        body: String,
+    },
 }
