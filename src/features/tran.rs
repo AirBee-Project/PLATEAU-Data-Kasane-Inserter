@@ -20,14 +20,14 @@ async fn process_gml_file(
     // パース・空間ID変換はCPUバウンドのため spawn_blocking で実行する
     let spatial_ids = tokio::task::spawn_blocking(move || {
         let mut ids = Vec::new();
-        match nazori::plateau::tran(&content, zoom, 0.0) {
+        match nazori::plateau::tran::single::flat(&content, zoom, 0.0) {
             Ok(v) => {
                 for ele in v {
                     // デバッグ用: ファイルあたり先頭N件で打ち切る
-                    if let Some(l) = limit {
-                        if ids.len() >= l {
-                            break;
-                        }
+                    if let Some(l) = limit
+                        && ids.len() >= l
+                    {
+                        break;
                     }
                     match ele {
                         Ok(id) => ids.push(SpatialId::from(&id)),
